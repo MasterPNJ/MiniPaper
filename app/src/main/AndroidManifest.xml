@@ -25,6 +25,12 @@
             android:label="@string/title_countdown_activity"
             android:theme="@style/Theme.MiniPaper" />
         <activity
+            android:name=".RandomtapActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"
+            android:label="@string/title_randomtap_activity"
+            android:theme="@style/Theme.MiniPaper" />
+        <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:exported="true">

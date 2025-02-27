@@ -1,5 +1,6 @@
 package com.example.minipaper
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
@@ -52,6 +53,9 @@ class CountdownActivity : AppCompatActivity() {
                 // Par exemple, lancer une nouvelle activité, démarrer un jeu, etc.
                 // startActivity(Intent(this@CountdownActivity, NextActivity::class.java))
                 // finish()
+
+                val intent = Intent(this@CountdownActivity, RandomtapActivity::class.java)
+                startActivity(intent)
 
                 // Pour la démonstration, on remet juste "1" visible ou on ferme l'activité.
                 finish()

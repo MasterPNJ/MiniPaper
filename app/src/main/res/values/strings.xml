@@ -2,4 +2,5 @@
     <string name="app_name">Mini Paper</string>
     <string name="title_activity_options">OptionsActivity</string>
     <string name="title_countdown_activity" />
+    <string name="title_randomtap_activity" />
 </resources>

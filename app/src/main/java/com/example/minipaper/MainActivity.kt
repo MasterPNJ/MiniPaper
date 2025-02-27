@@ -20,5 +20,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, OptionsActivity::class.java)
             startActivity(intent)
         }
+
+        val soloButton = findViewById<ImageView>(R.id.imageView9)
+        soloButton.setOnClickListener {
+            val intent = Intent(this, CountdownActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

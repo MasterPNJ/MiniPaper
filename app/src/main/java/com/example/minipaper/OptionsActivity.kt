@@ -1,46 +1,26 @@
 package com.example.minipaper
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.minipaper.ui.theme.MiniPaperTheme
+import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 
-class OptionsActivity : ComponentActivity() {
+
+class OptionsActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            MiniPaperTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
-            }
+        // Assurez-vous que "option" correspond bien au nom de votre fichier XML dans res/layout
+        setContentView(R.layout.option_menu)
+
+        // Récupération de l'ImageView "Main Menu"
+        val mainMenuButton = findViewById<ImageView>(R.id.imageView5)
+
+        // Définir le listener pour le clic
+        mainMenuButton.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish() // Ferme l'activité actuelle
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MiniPaperTheme {
-        Greeting("Android")
     }
 }

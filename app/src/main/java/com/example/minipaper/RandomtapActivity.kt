@@ -1,9 +1,11 @@
 package com.example.minipaper
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import java.util.Random
@@ -23,6 +25,8 @@ class RandomtapActivity : AppCompatActivity() {
     private var screenHeight = 0
 
     private val random = Random()
+
+    private lateinit var gameTimer: CountDownTimer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +74,26 @@ class RandomtapActivity : AppCompatActivity() {
         postit1.setOnClickListener { onPostitClickListener(postit1) }
         postit2.setOnClickListener { onPostitClickListener(postit2) }
         postit3.setOnClickListener { onPostitClickListener(postit3) }
+
+        // 7) Lancer un compte à rebours de 15 secondes (non visible)
+        gameTimer = object : CountDownTimer(15_000, 1_000) {
+            override fun onTick(millisUntilFinished: Long) {
+                // Pas d'affichage, car le timer est invisible pour l'utilisateur
+            }
+
+            override fun onFinish() {
+                // Le temps est écoulé : on peut par exemple afficher un Toast
+                Toast.makeText(
+                    this@RandomtapActivity,
+                    "Temps écoulé ! Score final : $score",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                // Puis on termine l'activité pour clôturer la partie
+                finish()
+            }
+        }
+        gameTimer.start()
     }
 
     /**
@@ -90,5 +114,13 @@ class RandomtapActivity : AppCompatActivity() {
         // Positionner le post-it (en coordonnées absolues dans le parent)
         postit.x = randomX.toFloat()
         postit.y = randomY.toFloat()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Annuler le timer si l'activité se détruit (par sécurité)
+        if (::gameTimer.isInitialized) {
+            gameTimer.cancel()
+        }
     }
 }

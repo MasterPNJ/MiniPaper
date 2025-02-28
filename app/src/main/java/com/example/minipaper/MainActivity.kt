@@ -26,10 +26,16 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, CountdownActivity::class.java)
             startActivity(intent)
         }
+<<<<<<< Updated upstream
 
         val multiButton = findViewById<ImageView>(R.id.imageView10)
         multiButton.setOnClickListener {
             val intent = Intent(this, MultiActivity::class.java)
+=======
+        val leaderBordButton = findViewById<ImageView>(R.id.imageView13)
+        leaderBordButton.setOnClickListener {
+            val intent = Intent(this, LeaderbordActivity::class.java)
+>>>>>>> Stashed changes
             startActivity(intent)
         }
     }

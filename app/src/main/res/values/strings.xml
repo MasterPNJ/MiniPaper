@@ -2,11 +2,8 @@
     <string name="app_name">Mini Paper</string>
     <string name="title_activity_options">OptionsActivity</string>
     <string name="title_countdown_activity" />
-<<<<<<< Updated upstream
     <string name="title_randomtap_activity" />
     <string name="title_first_connexion_activity" />
     <string name="title_multi_activity" />
-=======
     <string name="title_activity_leaderbord">\n</string>
->>>>>>> Stashed changes
 </resources>

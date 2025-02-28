@@ -26,5 +26,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, CountdownActivity::class.java)
             startActivity(intent)
         }
+
+        val multiButton = findViewById<ImageView>(R.id.imageView10)
+        multiButton.setOnClickListener {
+            val intent = Intent(this, MultiActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

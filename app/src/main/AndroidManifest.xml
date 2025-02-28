@@ -41,6 +41,13 @@
             android:theme="@style/Theme.MiniPaper" />
 
         <activity
+            android:name=".MultiActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"
+            android:label="@string/title_multi_activity"
+            android:theme="@style/Theme.MiniPaper" />
+
+        <activity
             android:name=".RandomtapActivity"
             android:screenOrientation="portrait"
             android:exported="false"

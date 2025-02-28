@@ -12,34 +12,47 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MiniPaper"
         tools:targetApi="31">
+
         <activity
             android:name=".OptionsActivity"
             android:screenOrientation="portrait"
             android:exported="false"
             android:label="@string/title_activity_options"
             android:theme="@style/Theme.MiniPaper" />
+
+        <!-- FirstConnexionActivity devient l'activité principale (Launcher) -->
+        <activity
+            android:name=".FirstConnexionActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:exported="true"
+            android:theme="@style/Theme.MiniPaper">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".CountdownActivity"
             android:screenOrientation="portrait"
             android:exported="false"
             android:label="@string/title_countdown_activity"
             android:theme="@style/Theme.MiniPaper" />
+
         <activity
             android:name=".RandomtapActivity"
             android:screenOrientation="portrait"
             android:exported="false"
             android:label="@string/title_randomtap_activity"
             android:theme="@style/Theme.MiniPaper" />
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false"
+            android:theme="@style/Theme.MiniPaper" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

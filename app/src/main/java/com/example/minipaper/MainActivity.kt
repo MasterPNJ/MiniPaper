@@ -23,7 +23,8 @@ class MainActivity : AppCompatActivity() {
 
         val soloButton = findViewById<ImageView>(R.id.imageView9)
         soloButton.setOnClickListener {
-            val intent = Intent(this, CountdownActivity::class.java)
+            //val intent = Intent(this, CountdownActivity::class.java) temporarly disabled
+            val intent = Intent(this, FlappyPapierActivity::class.java)
             startActivity(intent)
         }
 
@@ -38,5 +39,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, LeaderbordActivity::class.java)
             startActivity(intent)
         }
+
     }
 }

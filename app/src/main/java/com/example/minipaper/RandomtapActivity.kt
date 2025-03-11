@@ -1,5 +1,6 @@
 package com.example.minipaper
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.ViewTreeObserver
@@ -85,11 +86,14 @@ class RandomtapActivity : AppCompatActivity() {
                 // Le temps est écoulé : on peut par exemple afficher un Toast
                 Toast.makeText(
                     this@RandomtapActivity,
-                    "Temps écoulé ! Score final : $score",
+                    "Temps écoulé ! Score sur RandomTap : $score",
                     Toast.LENGTH_LONG
                 ).show()
+                
+                saveScoreToPreferences(score)
 
-                // Puis on termine l'activité pour clôturer la partie
+                startActivity(Intent(this@RandomtapActivity, ShakeItUpActivity::class.java))
+
                 finish()
             }
         }
@@ -114,6 +118,15 @@ class RandomtapActivity : AppCompatActivity() {
         // Positionner le post-it (en coordonnées absolues dans le parent)
         postit.x = randomX.toFloat()
         postit.y = randomY.toFloat()
+    }
+
+    private fun saveScoreToPreferences(gameScore: Int) {
+        val sharedPref = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val oldScore = sharedPref.getInt("cumulativeScore", 0)
+        val newScore = oldScore + gameScore
+        sharedPref.edit()
+            .putInt("cumulativeScore", newScore)
+            .apply()
     }
 
     override fun onDestroy() {

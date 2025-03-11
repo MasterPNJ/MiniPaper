@@ -74,6 +74,14 @@
             android:exported="false"
             android:label="@string/title_activity_leaderbord"
             android:theme="@style/Theme.MiniPaper" />
+
+        <activity
+            android:name=".ShakeItUpActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"
+            android:label="@string/title_activity_shake_it_up"
+            android:theme="@style/Theme.MiniPaper" />
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"

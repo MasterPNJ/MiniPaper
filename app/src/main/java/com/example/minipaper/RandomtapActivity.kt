@@ -92,7 +92,7 @@ class RandomtapActivity : AppCompatActivity() {
                 
                 saveScoreToPreferences(score)
 
-                startActivity(Intent(this@RandomtapActivity, EndActivity::class.java))
+                startActivity(Intent(this@RandomtapActivity, ShakeItUpActivity::class.java))
 
                 finish()
             }

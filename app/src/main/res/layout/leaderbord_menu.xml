@@ -67,4 +67,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+    <TextView
+        android:id="@+id/listeScore"
+        android:layout_width="230dp"
+        android:layout_height="189dp"
+        android:layout_marginStart="4dp"
+        android:text=""
+        android:textColor="#0F0303"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/backgroundImage" />
 </androidx.constraintlayout.widget.ConstraintLayout>

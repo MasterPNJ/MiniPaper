@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity() {
         // Récupère ton ImageView
         val imageViewOption = findViewById<ImageView>(R.id.imageViewOption)
 
+        resetScore(0)
+
         // Ajoute un listener de clic
         imageViewOption.setOnClickListener {
             // Au clic, on lance l'activité OptionsActivity
@@ -40,5 +42,14 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+    }
+
+    private fun resetScore(gameScore: Int) {
+        val sharedPref = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val oldScore = sharedPref.getInt("cumulativeScore", 0)
+        val newScore = 0
+        sharedPref.edit()
+            .putInt("cumulativeScore", newScore)
+            .apply()
     }
 }

@@ -37,12 +37,13 @@
         android:fontFamily="@font/shrikhand"
         android:text="Scores"
         android:textColor="#100000"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="@+id/imageView3"
-        app:layout_constraintHorizontal_bias="0.453"
+        app:layout_constraintHorizontal_bias="0.478"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView3"
-        app:layout_constraintVertical_bias="0.229" />
+        app:layout_constraintVertical_bias="0.206" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -63,6 +64,7 @@
         android:fontFamily="@font/shrikhand"
         android:text="Back to Menu"
         android:textColor="#0F0303"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,6 +75,7 @@
         android:layout_width="230dp"
         android:layout_height="189dp"
         android:layout_marginStart="4dp"
+        android:fontFamily="@font/shrikhand"
         android:text=""
         android:textColor="#0F0303"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"

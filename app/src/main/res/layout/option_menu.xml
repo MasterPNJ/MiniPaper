@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Fond d'écran -->
     <ImageView
         android:id="@+id/backgroundImage2"
         android:layout_width="2000dp"
@@ -18,6 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
+    <!-- Papier du titre "Settings" -->
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="wrap_content"
@@ -31,6 +34,7 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/paper_6" />
 
+    <!-- Titre "Settings" -->
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
@@ -44,6 +48,65 @@
         app:layout_constraintStart_toStartOf="@+id/imageView4"
         app:layout_constraintTop_toTopOf="@+id/backgroundImage2" />
 
+    <!-- Texte "Music" -->
+
+    <!-- Barre de volume pour la musique -->
+
+    <TextView
+        android:id="@+id/textViewMusic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="128dp"
+        android:fontFamily="@font/shrikhand"
+        android:text="Music"
+        android:textColor="#090000"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/backgroundImage2"
+        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintStart_toStartOf="@+id/backgroundImage2"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <SeekBar
+        android:id="@+id/seekBarMusic"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:max="100"
+        app:layout_constraintTop_toBottomOf="@+id/textViewMusic"
+        app:layout_constraintStart_toStartOf="@+id/backgroundImage2"
+        app:layout_constraintEnd_toEndOf="@+id/backgroundImage2"
+        android:layout_marginTop="10dp"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+    <!-- Texte "Bruitage" -->
+
+    <!-- Barre de volume pour le bruitage -->
+
+    <TextView
+        android:id="@+id/textViewBruitage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:fontFamily="@font/shrikhand"
+        android:text="Bruitage"
+        android:textColor="#090000"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/backgroundImage2"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="@+id/backgroundImage2"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarMusic" />
+
+    <SeekBar
+        android:id="@+id/seekBarBruitage"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:max="100"
+        app:layout_constraintTop_toBottomOf="@+id/textViewBruitage"
+        app:layout_constraintStart_toStartOf="@+id/backgroundImage2"
+        app:layout_constraintEnd_toEndOf="@+id/backgroundImage2"
+        android:layout_marginTop="10dp"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+    <!-- Papier pour "Main Menu" -->
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="271dp"
@@ -53,10 +116,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarBruitage"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/paper_1" />
 
+    <!-- Texte "Main Menu" -->
     <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"

@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         soloButton.setOnClickListener {
             //val intent = Intent(this, CountdownActivity::class.java) temporarly disabled
             val intent = Intent(this, CountdownActivity::class.java)
+            //val intent = Intent(this, VolumeMasterActivity::class.java)
             startActivity(intent)
         }
 

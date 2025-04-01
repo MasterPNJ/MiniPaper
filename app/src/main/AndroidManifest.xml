@@ -51,6 +51,13 @@
             android:theme="@style/Theme.MiniPaper" />
 
         <activity
+            android:name=".SoloGameControllerActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"
+            android:label="@string/title_solo_game_controller_activity"
+            android:theme="@style/Theme.MiniPaper" />
+
+        <activity
             android:name=".MultiActivity"
             android:screenOrientation="portrait"
             android:exported="false"

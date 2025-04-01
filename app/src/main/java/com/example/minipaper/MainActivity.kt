@@ -26,8 +26,8 @@ class MainActivity : AppCompatActivity() {
         val soloButton = findViewById<ImageView>(R.id.imageView9)
         soloButton.setOnClickListener {
             //val intent = Intent(this, CountdownActivity::class.java) temporarly disabled
-            val intent = Intent(this, CountdownActivity::class.java)
-            //val intent = Intent(this, VolumeMasterActivity::class.java)
+            //val intent = Intent(this, CountdownActivity::class.java)
+            val intent = Intent(this, SoloGameControllerActivity::class.java)
             startActivity(intent)
         }
 

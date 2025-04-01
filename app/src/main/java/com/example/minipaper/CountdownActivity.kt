@@ -54,8 +54,9 @@ class CountdownActivity : AppCompatActivity() {
                 // startActivity(Intent(this@CountdownActivity, NextActivity::class.java))
                 // finish()
 
-                val intent = Intent(this@CountdownActivity, RandomtapActivity::class.java)
-                startActivity(intent)
+                //val intent = Intent(this@CountdownActivity, RandomtapActivity::class.java)
+                setResult(RESULT_OK)
+                //startActivity(intent)
 
                 // Pour la démonstration, on remet juste "1" visible ou on ferme l'activité.
                 finish()
@@ -67,6 +68,7 @@ class CountdownActivity : AppCompatActivity() {
         cancelText.setOnClickListener {
             // Annuler le compte à rebours et fermer l'activité
             countDownTimer.cancel()
+            setResult(RESULT_CANCELED)
             finish()
         }
     }

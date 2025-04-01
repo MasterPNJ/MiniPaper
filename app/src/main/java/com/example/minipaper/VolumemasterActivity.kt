@@ -154,7 +154,8 @@ class VolumeMasterActivity : AppCompatActivity() {
 
                 // Après un court délai, passer à EndActivity
                 handler.postDelayed({
-                    startActivity(Intent(this, EndActivity::class.java))
+                    //startActivity(Intent(this, EndActivity::class.java))
+                    setResult(RESULT_OK)
                     finish()
                 }, 1000)
             }

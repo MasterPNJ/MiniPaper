@@ -49,15 +49,21 @@ class LeaderbordActivity : AppCompatActivity() {
     private fun loadScores() {
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val scores = mutableListOf<String>()
+                val players = mutableListOf<Player>()
 
+                // Récupérer les joueurs et les ajouter à la liste
                 for (scoreSnapshot in snapshot.children) {
-                    // Récupération en utilisant le modèle Player
                     val player = scoreSnapshot.getValue(Player::class.java)
                     player?.let {
-                        scores.add("${it.pseudo} - Score: ${it.best_score}")
+                        players.add(it)
                     }
                 }
+
+                // Trier les joueurs par score décroissant
+                val sortedPlayers = players.sortedByDescending { it.best_score }
+
+                // Construire la liste des scores à afficher
+                val scores = sortedPlayers.map { "${it.pseudo} - Score: ${it.best_score}" }
 
                 // Afficher les scores dans le TextView (si plusieurs, les concaténer)
                 scoreListView.text = scores.joinToString("\n")

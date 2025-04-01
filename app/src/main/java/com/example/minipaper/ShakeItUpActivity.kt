@@ -70,7 +70,10 @@ class ShakeItUpActivity : AppCompatActivity(), SensorEventListener {
                 saveScoreToPreferences(shakeCount)
 
                 // Aller à EndActivity
-                startActivity(Intent(this@ShakeItUpActivity, EndActivity::class.java))
+                //startActivity(Intent(this@ShakeItUpActivity, EndActivity::class.java))
+
+                //startActivity(Intent(this@ShakeItUpActivity, VolumeMasterActivity::class.java))
+                setResult(RESULT_OK)
                 finish()
             }
         }.start()

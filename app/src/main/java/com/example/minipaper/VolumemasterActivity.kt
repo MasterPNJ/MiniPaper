@@ -27,14 +27,15 @@ class VolumeMasterActivity : AppCompatActivity() {
     // Volume cible choisi aléatoirement au démarrage (fixe)
     private val targetDz = (50..90).random()
 
-    // Chrono pour vérifier si le volume reste dans la zone pendant 3s
+    // Chrono pour vérifier si le volume reste dans la zone pendant requiredTime secondes
     private var timeInRange = 0f
-    private val requiredTime = 1f
+    private val requiredTime = 1f // 1 seconde à tenir
+
+    // Pour mesurer le temps total écoulé depuis le début du jeu
+    private var startTime: Long = 0L
 
     private var lastUpdateTime = 0L
     private val updateInterval = 100L // mise à jour toutes les 100 ms
-
-    private var dzScore = 0
 
     private val handler = Handler(Looper.getMainLooper())
     private var isGameOver = false
@@ -57,7 +58,9 @@ class VolumeMasterActivity : AppCompatActivity() {
         checkAudioPermission()
         startMediaRecorder()
 
-        lastUpdateTime = System.currentTimeMillis()
+        // Enregistrer l'heure de début
+        startTime = System.currentTimeMillis()
+        lastUpdateTime = startTime
         handler.post(updateRunnable)
 
         Toast.makeText(this, "Objectif : $targetDz Dz !", Toast.LENGTH_LONG).show()
@@ -111,7 +114,7 @@ class VolumeMasterActivity : AppCompatActivity() {
 
     /**
      * Mesure le volume en utilisant getMaxAmplitude() et le convertit en "dB".
-     * 20 * log10(amplitude) est une estimation.
+     * 20 * log10(amplitude) est une estimation (à calibrer selon vos besoins).
      */
     private fun measureVolume(): Float {
         val amplitude = mediaRecorder?.maxAmplitude ?: 0
@@ -124,8 +127,9 @@ class VolumeMasterActivity : AppCompatActivity() {
 
     /**
      * Met à jour l'interface.
-     * Le TextView affiche la valeur cible fixe.
+     * Le TextView affiche la cible fixe.
      * La barre se met à jour en fonction de la proximité du volume mesuré à la cible.
+     * Lorsqu'on maintient la cible pendant requiredTime secondes, le score est calculé.
      */
     private fun updateUI(currentDz: Float) {
         val diff = abs(currentDz - targetDz)
@@ -138,9 +142,17 @@ class VolumeMasterActivity : AppCompatActivity() {
             timeInRange += dt
             arcProgressBar.setArcColor(Color.GREEN)
             if (timeInRange >= requiredTime) {
+                // Calcul du temps total écoulé depuis le début du jeu
+                val elapsedTime = (now - startTime) / 1000f  // en secondes
+                // Calcul du score selon la formule : (100 + targetDz) / elapsedTime
+                val computedScore = (100 + targetDz) / elapsedTime
                 isGameOver = true
-                Toast.makeText(this, "Bravo ! Vous avez maintenu $targetDz Dz pendant ${requiredTime.toInt()}s !", Toast.LENGTH_LONG).show()
-                // Après un délai, passer à EndActivity
+                Toast.makeText(this, "Bravo ! Vous avez maintenu $targetDz Dz pendant ${requiredTime.toInt()}s ! Score: ${computedScore.toInt()}", Toast.LENGTH_LONG).show()
+
+                // Sauvegarder le score dans les SharedPreferences ou l'envoyer à Firebase
+                saveScoreToPreferences(computedScore.toInt())
+
+                // Après un court délai, passer à EndActivity
                 handler.postDelayed({
                     startActivity(Intent(this, EndActivity::class.java))
                     finish()
@@ -161,6 +173,18 @@ class VolumeMasterActivity : AppCompatActivity() {
         if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(permission), 1234)
         }
+    }
+
+    /**
+     * Ajoute le score local (computedScore) au score cumulé dans SharedPreferences.
+     */
+    private fun saveScoreToPreferences(gameScore: Int) {
+        val sharedPref = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val oldScore = sharedPref.getInt("cumulativeScore", 0)
+        val newScore = oldScore + gameScore
+        sharedPref.edit()
+            .putInt("cumulativeScore", newScore)
+            .apply()
     }
 
     override fun onDestroy() {

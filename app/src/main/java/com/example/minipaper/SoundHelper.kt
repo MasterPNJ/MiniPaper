@@ -2,6 +2,7 @@ package com.example.minipaper
 
 import android.content.Context
 import android.media.AudioAttributes
+import android.media.MediaPlayer
 import android.media.SoundPool
 import android.util.Log
 
@@ -16,32 +17,36 @@ class SoundHelper(context: Context) {
             .setUsage(AudioAttributes.USAGE_GAME)
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .build()
+
         soundPool = SoundPool.Builder()
             .setMaxStreams(5)
             .setAudioAttributes(audioAttributes)
             .build()
 
-        // Ajoutez un listener pour savoir quand le son est chargé
+        // Ajout : tester si le fichier est accessible
+        try {
+            buttonSoundId = soundPool.load(context, R.raw.bubble, 1)
+            Log.d("SoundHelper", "Sound loading started: ID=$buttonSoundId")
+        } catch (e: Exception) {
+            Log.e("SoundHelper", "Exception lors du chargement du son : ${e.message}")
+        }
+
+        // Ajout d'un log si le chargement échoue
         soundPool.setOnLoadCompleteListener { _, sampleId, status ->
             if (status == 0) {
-                // Son chargé
                 isLoaded = true
+                Log.d("SoundHelper", "Sound loaded successfully: sampleId=$sampleId")
             } else {
-                Log.e("SoundHelper", "Failed to load sound: status=$status")
+                Log.e("SoundHelper", "Failed to load sound: status=$status, sampleId=$sampleId")
             }
         }
-        // Chargez le son depuis res/raw/button_click.mp3
-        buttonSoundId = soundPool.load(context, R.raw.button_click, 1)
-
     }
 
-    /**
-     * Joue le son du bouton.
-     * @param volume un Float entre 0.0 et 1.0
-     */
     fun playButtonSound(volume: Float) {
         if (isLoaded) {
             soundPool.play(buttonSoundId, volume, volume, 1, 0, 1f)
+        } else {
+            Log.e("SoundHelper", "Sound not loaded yet, cannot play.")
         }
     }
 

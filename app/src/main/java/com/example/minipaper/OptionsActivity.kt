@@ -34,7 +34,6 @@ class OptionsActivity : AppCompatActivity() {
         val musicVolume = prefs.getInt("musicVolume", 50)
         val bruitageVolume = prefs.getInt("bruitageVolume", 50)
 
-        // Appliquer les valeurs initiales
         seekBarMusic.progress = musicVolume
         seekBarBruitage.progress = bruitageVolume
 
@@ -60,14 +59,15 @@ class OptionsActivity : AppCompatActivity() {
             }
         })
 
-        // Exemple : dans le clic sur "Main Menu", jouer le son puis lancer MainActivity
         mainMenuButton.setOnClickListener {
-            // Récupérer le volume de bruitage (convertir en valeur 0.0 - 1.0)
             val volume = getBruitageVolume()
             soundHelper.playButtonSound(volume)
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+
+            startActivity(Intent(this, MainActivity::class.java))
+
+            mainMenuButton.postDelayed({
+                finish()
+            }, 300)
         }
     }
 

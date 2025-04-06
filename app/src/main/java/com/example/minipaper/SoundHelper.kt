@@ -1,9 +1,11 @@
 package com.example.minipaper
 
 import android.content.Context
+import android.content.Intent
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.SoundPool
+import android.os.Handler
 import android.util.Log
 
 class SoundHelper(context: Context) {
@@ -48,6 +50,23 @@ class SoundHelper(context: Context) {
         } else {
             Log.e("SoundHelper", "Sound not loaded yet, cannot play.")
         }
+    }
+
+    fun playSoundAndLaunchActivity(
+        context: Context,
+        volume: Float,
+        intent: Intent,
+        finishActivity: () -> Unit
+    ) {
+        if (isLoaded) {
+            soundPool.play(buttonSoundId, volume, volume, 1, 0, 1f)
+        }
+
+        context.startActivity(intent)
+
+        Handler(context.mainLooper).postDelayed({
+            finishActivity()
+        }, 300)
     }
 
     fun release() {

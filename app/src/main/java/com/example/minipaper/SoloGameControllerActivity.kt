@@ -6,7 +6,7 @@ import android.os.Bundle
 
 class SoloGameControllerActivity : AppCompatActivity() {
 
-    // Liste des mini-jeux disponibles (assurez-vous qu'ils sont déclarés dans le manifeste)
+    // Liste des mini-jeux disponibles
     private val gamesList = listOf(
         RandomtapActivity::class.java,
         ShakeItUpActivity::class.java,
@@ -23,13 +23,14 @@ class SoloGameControllerActivity : AppCompatActivity() {
     // Flag indiquant que le cooldown initial a été effectué
     private var cooldownDone = false
 
+    private lateinit var soundHelper: SoundHelper
+
     companion object {
         const val REQUEST_GAME = 1001
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Optionnel : affichez un layout de chargement ou laissez vide
         launchNextGame()
     }
 
@@ -58,12 +59,20 @@ class SoloGameControllerActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        soundHelper = SoundHelper(this)
+
         super.onActivityResult(requestCode, resultCode, data)
-        // Si l'activité annulée (par exemple, le countdown a été cancelé)
         if (resultCode != RESULT_OK) {
-            // Retourner au menu principal (ou gérer autrement l'annulation)
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
+            // Retourner au menu principal
+            val volume = PreferenceUtils.getBruitageVolume(this)
+            val intent = Intent(this, MainActivity::class.java)
+
+            soundHelper.playSoundAndLaunchActivity(
+                context = this,
+                volume = volume,
+                intent = intent,
+                finishActivity = { finish() }
+            )
             return
         }
 

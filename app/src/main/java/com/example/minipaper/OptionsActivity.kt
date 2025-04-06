@@ -60,22 +60,17 @@ class OptionsActivity : AppCompatActivity() {
         })
 
         mainMenuButton.setOnClickListener {
-            val volume = getBruitageVolume()
-            soundHelper.playButtonSound(volume)
+            val volume = PreferenceUtils.getBruitageVolume(this)
+            val intent = Intent(this, MainActivity::class.java)
 
-            startActivity(Intent(this, MainActivity::class.java))
-
-            mainMenuButton.postDelayed({
-                finish()
-            }, 300)
+            soundHelper.playSoundAndLaunchActivity(
+                context = this,
+                volume = volume,
+                intent = intent,
+                finishActivity = { finish() }
+            )
         }
     }
-
-    private fun getBruitageVolume(): Float {
-        val bruitageVolume = prefs.getInt("bruitageVolume", 50)
-        return bruitageVolume / 100f
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         soundHelper.release()

@@ -14,6 +14,7 @@ import com.google.firebase.database.ValueEventListener
 import java.util.UUID
 
 class EndActivity : AppCompatActivity() {
+    private lateinit var soundHelper: SoundHelper
 
     private lateinit var database: DatabaseReference
 
@@ -21,9 +22,11 @@ class EndActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_end)
 
-        // 1) Initialiser Firebase (si pas déjà fait dans l'Application)
+        soundHelper = SoundHelper(this)
+
+        // Initialiser Firebase (si pas déjà fait dans l'Application)
         FirebaseApp.initializeApp(this)
-        // 2) Récupérer la référence "leaderboard" dans la base
+        // Récupérer la référence "leaderboard" dans la base
         database = FirebaseDatabase.getInstance(
             "https://mini-paper-db-default-rtdb.europe-west1.firebasedatabase.app/"
         ).getReference("leaderboard")
@@ -41,14 +44,21 @@ class EndActivity : AppCompatActivity() {
         // Mettre à jour le TextView
         scoreTextView.text = "Score : $totalScore"
 
-        // 3) Envoyer le score + pseudo à Firebase en utilisant un ID unique
+        // Envoyer le score + pseudo à Firebase en utilisant un ID unique
         sendScoreToFirebase(pseudo, totalScore)
 
         // Gérer le bouton "Main Menu"
         val mainMenuTextView = findViewById<TextView>(R.id.textView22)
         mainMenuTextView.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
+            val volume = PreferenceUtils.getBruitageVolume(this)
+            val intent = Intent(this, MainActivity::class.java)
+
+            soundHelper.playSoundAndLaunchActivity(
+                context = this,
+                volume = volume,
+                intent = intent,
+                finishActivity = { finish() }
+            )
         }
     }
 

@@ -18,12 +18,15 @@ data class Player(
 
 class LeaderbordActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
-    private lateinit var scoreListView: TextView // Remplace par un RecyclerView si tu veux afficher plusieurs scores
+    private lateinit var scoreListView: TextView
+    private lateinit var soundHelper: SoundHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
         setContentView(R.layout.leaderbord_menu)
+
+        soundHelper = SoundHelper(this)
 
         // Initialiser Firebase Database
         database = FirebaseDatabase.getInstance("https://mini-paper-db-default-rtdb.europe-west1.firebasedatabase.app/")
@@ -41,8 +44,14 @@ class LeaderbordActivity : AppCompatActivity() {
         // Définir le listener pour le clic
         mainMenuButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish() // Ferme l'activité actuelle
+            val volume = PreferenceUtils.getBruitageVolume(this)
+
+            soundHelper.playSoundAndLaunchActivity(
+                context = this,
+                volume = volume,
+                intent = intent,
+                finishActivity = { finish() }
+            )
         }
     }
 

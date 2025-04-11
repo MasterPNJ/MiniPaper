@@ -46,6 +46,20 @@ class LeaderbordActivity : AppCompatActivity() {
                 finishActivity = { finish() }
             )
         }
+
+        val statisticsMenu = findViewById<ImageView>(R.id.imageView34)
+
+        statisticsMenu.setOnClickListener {
+            val intent = Intent(this, StatisticsActivity::class.java)
+            val volume = PreferenceUtils.getBruitageVolume(this)
+
+            soundHelper.playSoundAndLaunchActivity(
+                context = this,
+                volume = volume,
+                intent = intent,
+                finishActivity = { finish() }
+            )
+        }
     }
 
     private fun loadScores() {

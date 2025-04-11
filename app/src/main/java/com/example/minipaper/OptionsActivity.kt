@@ -39,13 +39,16 @@ class OptionsActivity : AppCompatActivity() {
 
         // Gérer les changements pour la musique
         seekBarMusic.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {}
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                seekBar?.let {
-                    prefs.edit().putInt("musicVolume", it.progress).apply()
-                }
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val volume = progress / 100f
+                prefs.edit().putInt("musicVolume", progress).apply()
+
+                // Change le volume directement dans le MediaPlayer du service
+                MusicService.mediaPlayer?.setVolume(volume, volume)
             }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
         // Gérer les changements pour le bruitage

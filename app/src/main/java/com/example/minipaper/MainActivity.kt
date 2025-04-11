@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity() {
 
         soundHelper = SoundHelper(this)
 
+        startService(Intent(this, MusicService::class.java))
+
         // Récupère ton ImageView
         val imageViewOption = findViewById<ImageView>(R.id.imageViewOption)
 

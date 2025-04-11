@@ -1,17 +1,27 @@
 package com.example.minipaper
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.google.firebase.FirebaseApp
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlin.math.sqrt
 
 class ShakeItUpActivity : AppCompatActivity(), SensorEventListener {
@@ -36,12 +46,19 @@ class ShakeItUpActivity : AppCompatActivity(), SensorEventListener {
     private var gameTimer: CountDownTimer? = null
     private val gameDuration = 10_000L // 10 secondes
 
+    // Firebase Database
+    private lateinit var database: DatabaseReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Verrouiller l'orientation en portrait (optionnel)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
         setContentView(R.layout.activity_shakeitup)
+
+        // Initialiser Firebase (si ce n'est pas fait ailleurs) et obtenir la référence du leaderboard
+        FirebaseApp.initializeApp(this)
+        database = FirebaseDatabase.getInstance("https://mini-paper-db-default-rtdb.europe-west1.firebasedatabase.app/")
+            .getReference("leaderboard")
 
         // 1) Récupérer la TextView et la ProgressBar
         shakeInfoText = findViewById(R.id.textView23)
@@ -59,20 +76,18 @@ class ShakeItUpActivity : AppCompatActivity(), SensorEventListener {
         // 4) Démarrer un compte à rebours
         gameTimer = object : CountDownTimer(gameDuration, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                // On pourrait afficher un timer si besoin
+                // Optionnel : afficher un timer
             }
 
             override fun onFinish() {
-                // Temps écoulé
                 Toast.makeText(this@ShakeItUpActivity, "Time's up! Final shakes: $shakeCount", Toast.LENGTH_LONG).show()
 
-                // Enregistrer le score dans les préférences
+                // Mise à jour des stats dans Firebase
+                PlayerStatsHelper.updatePlayerStats(this@ShakeItUpActivity, database, "shakeItUp", shakeCount)
+
+                // Enregistrer le score dans les SharedPreferences
                 saveScoreToPreferences(shakeCount)
 
-                // Aller à EndActivity
-                //startActivity(Intent(this@ShakeItUpActivity, EndActivity::class.java))
-
-                //startActivity(Intent(this@ShakeItUpActivity, VolumeMasterActivity::class.java))
                 setResult(RESULT_OK)
                 finish()
             }
@@ -81,34 +96,26 @@ class ShakeItUpActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onResume() {
         super.onResume()
-        // Enregistrer le listener pour l'accéléromètre
-        accelerometer?.also { accel ->
-            sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_GAME)
+        accelerometer?.also { sensor ->
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_GAME)
         }
     }
 
     override fun onPause() {
         super.onPause()
-        // Désenregistrer le listener
         sensorManager.unregisterListener(this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        // Annuler le timer s'il existe encore
         gameTimer?.cancel()
     }
 
-    /**
-     * Détection du shake : on calcule la "force" de l'accélération par rapport à la gravité.
-     */
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
             val x = event.values[0]
             val y = event.values[1]
             val z = event.values[2]
-
-            // Calcul de l'accélération
             val acceleration = sqrt(
                 (x * x + y * y + z * z).toDouble() /
                         (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH)
@@ -116,25 +123,18 @@ class ShakeItUpActivity : AppCompatActivity(), SensorEventListener {
 
             if (acceleration > shakeThreshold) {
                 val currentTime = System.currentTimeMillis()
-                // Éviter de compter 10 shakes en 1 seconde à cause d'oscillations
                 if (currentTime - lastShakeTime > shakeCooldown) {
                     shakeCount++
                     shakeInfoText.text = "Shake fast !!\nScore : $shakeCount"
-
-                    // 5) Mettre à jour la ProgressBar
                     progressBar.progress = shakeCount
-
-                    // Si on veut stopper dès qu'on atteint le max de la barre
                     if (shakeCount >= progressBar.max) {
                         gameTimer?.cancel()
                         Toast.makeText(this, "You reached ${progressBar.max} shakes!", Toast.LENGTH_SHORT).show()
-
-                        // Enregistrer le score
                         saveScoreToPreferences(shakeCount)
-                        startActivity(Intent(this, EndActivity::class.java))
+                        PlayerStatsHelper.updatePlayerStats(this, database, "shakeItUp", shakeCount)
+                        setResult(RESULT_OK)
                         finish()
                     }
-
                     lastShakeTime = currentTime
                 }
             }
@@ -145,15 +145,10 @@ class ShakeItUpActivity : AppCompatActivity(), SensorEventListener {
         // Pas utilisé ici
     }
 
-    /**
-     * Ajoute le score local (shakeCount) au score cumulé dans SharedPreferences.
-     */
     private fun saveScoreToPreferences(gameScore: Int) {
         val sharedPref = getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val oldScore = sharedPref.getInt("cumulativeScore", 0)
         val newScore = oldScore + gameScore
-        sharedPref.edit()
-            .putInt("cumulativeScore", newScore)
-            .apply()
+        sharedPref.edit().putInt("cumulativeScore", newScore).apply()
     }
 }

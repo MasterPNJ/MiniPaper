@@ -9,21 +9,17 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.*
 import com.google.firebase.FirebaseApp
 
-// Classe modèle pour correspondre à la structure Firebase
-data class Player(
-    val id: String = "",
-    val pseudo: String = "",
-    val best_score: Int = 0
-)
-
 class LeaderbordActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
-    private lateinit var scoreListView: TextView // Remplace par un RecyclerView si tu veux afficher plusieurs scores
+    private lateinit var scoreListView: TextView
+    private lateinit var soundHelper: SoundHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
         setContentView(R.layout.leaderbord_menu)
+
+        soundHelper = SoundHelper(this)
 
         // Initialiser Firebase Database
         database = FirebaseDatabase.getInstance("https://mini-paper-db-default-rtdb.europe-west1.firebasedatabase.app/")
@@ -41,8 +37,28 @@ class LeaderbordActivity : AppCompatActivity() {
         // Définir le listener pour le clic
         mainMenuButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish() // Ferme l'activité actuelle
+            val volume = PreferenceUtils.getBruitageVolume(this)
+
+            soundHelper.playSoundAndLaunchActivity(
+                context = this,
+                volume = volume,
+                intent = intent,
+                finishActivity = { finish() }
+            )
+        }
+
+        val statisticsMenu = findViewById<ImageView>(R.id.imageView34)
+
+        statisticsMenu.setOnClickListener {
+            val intent = Intent(this, StatisticsActivity::class.java)
+            val volume = PreferenceUtils.getBruitageVolume(this)
+
+            soundHelper.playSoundAndLaunchActivity(
+                context = this,
+                volume = volume,
+                intent = intent,
+                finishActivity = { finish() }
+            )
         }
     }
 

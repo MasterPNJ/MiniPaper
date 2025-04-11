@@ -5,7 +5,10 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+
+
     <application
+        android:name=".MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_minipaper_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MiniPaper"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        >
 
         <activity
             android:name=".OptionsActivity"
@@ -36,6 +40,8 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".MusicService" android:exported="false" />
+
         <activity
             android:name=".CountdownActivity"
             android:screenOrientation="portrait"
@@ -48,6 +54,13 @@
             android:screenOrientation="portrait"
             android:exported="false"
             android:label="@string/title_flappy_papier_activity"
+            android:theme="@style/Theme.MiniPaper" />
+
+        <activity
+            android:name=".StatisticsActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"
+            android:label="@string/title_statistics_activity"
             android:theme="@style/Theme.MiniPaper" />
 
         <activity

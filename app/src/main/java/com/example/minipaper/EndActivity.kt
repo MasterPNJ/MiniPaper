@@ -14,16 +14,17 @@ import com.google.firebase.database.ValueEventListener
 import java.util.UUID
 
 class EndActivity : AppCompatActivity() {
-
+    private lateinit var soundHelper: SoundHelper
     private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_end)
 
-        // 1) Initialiser Firebase (si pas déjà fait dans l'Application)
+        soundHelper = SoundHelper(this)
+
+        // Initialiser Firebase
         FirebaseApp.initializeApp(this)
-        // 2) Récupérer la référence "leaderboard" dans la base
         database = FirebaseDatabase.getInstance(
             "https://mini-paper-db-default-rtdb.europe-west1.firebasedatabase.app/"
         ).getReference("leaderboard")
@@ -31,65 +32,68 @@ class EndActivity : AppCompatActivity() {
         // Récupérer la vue "Score :"
         val scoreTextView = findViewById<TextView>(R.id.textView20)
 
-        // Charger le score cumulé depuis les SharedPreferences
+        // Charger le score cumulé depuis SharedPreferences
         val sharedPref = getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val totalScore = sharedPref.getInt("cumulativeScore", 0)
 
-        // Récupérer le pseudo (en supposant qu'il est stocké sous la clé "username")
+        // Récupérer le pseudo (stocké lors de la première connexion)
         val pseudo = sharedPref.getString("username", "Player") ?: "Player"
 
         // Mettre à jour le TextView
         scoreTextView.text = "Score : $totalScore"
 
-        // 3) Envoyer le score + pseudo à Firebase en utilisant un ID unique
+        // Envoyer le score + pseudo à Firebase
         sendScoreToFirebase(pseudo, totalScore)
 
         // Gérer le bouton "Main Menu"
         val mainMenuTextView = findViewById<TextView>(R.id.textView22)
         mainMenuTextView.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
+            val volume = PreferenceUtils.getBruitageVolume(this)
+            val intent = Intent(this, MainActivity::class.java)
+            soundHelper.playSoundAndLaunchActivity(
+                context = this,
+                volume = volume,
+                intent = intent,
+                finishActivity = { finish() }
+            )
         }
     }
 
     /**
-     * Envoie le score + pseudo dans Firebase sous /leaderboard/{userId},
-     * où userId est unique et stocké localement.
+     * Met à jour les statistiques du joueur dans Firebase.
+     * Il ne met à jour le champ best_score que si le nouveau score (newScore) est supérieur
+     * au score actuellement stocké, tout en préservant les autres statistiques.
      */
     private fun sendScoreToFirebase(pseudo: String, newScore: Int) {
-        // Récupérer l'ID unique local
         val userId = getOrCreateUserId(this)
-
-        // Récupérer la référence /leaderboard/userId
         val userRef = database.child(userId)
-
-        // Lire la valeur actuelle (s’il y en a une)
         userRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                // Convertir le snapshot en Player (ou null s’il n’existe pas encore)
+                // Récupérer l'objet Player existant, ou utiliser des valeurs par défaut
                 val existingPlayer = snapshot.getValue(Player::class.java)
                 val currentBest = existingPlayer?.best_score ?: 0
 
-                // Comparer avec le nouveau score
+                // Mettre à jour uniquement si le nouveau score est supérieur
                 if (newScore > currentBest) {
-                    // Nouveau score plus élevé, on met à jour
                     val updatedPlayer = Player(
                         id = userId,
                         pseudo = pseudo,
-                        best_score = newScore
+                        best_score = newScore,
+                        shakeItUp_bestScore = existingPlayer?.shakeItUp_bestScore ?: 0,
+                        randomTap_bestScore = existingPlayer?.randomTap_bestScore ?: 0,
+                        volumeMaster_bestScore = existingPlayer?.volumeMaster_bestScore ?: 0,
+                        volumeMaster_bestTime = existingPlayer?.volumeMaster_bestTime ?: 0f
                     )
                     userRef.setValue(updatedPlayer)
                 }
-                // Sinon, on ne fait rien (le score existant est déjà meilleur)
+                // Sinon, ne pas écraser les autres statistiques
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Gérer l'erreur, par exemple :
-                // Toast.makeText(this@EndActivity, "Erreur : ${error.message}", Toast.LENGTH_SHORT).show()
+                // Gestion de l'erreur si nécessaire
             }
         })
     }
-
 
     /**
      * Crée ou récupère un userId unique, stocké dans SharedPreferences.
@@ -97,11 +101,8 @@ class EndActivity : AppCompatActivity() {
     fun getOrCreateUserId(context: Context): String {
         val prefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val existingId = prefs.getString("userId", null)
-
         return if (existingId == null) {
-            // Générer un nouvel ID (UUID)
             val newId = UUID.randomUUID().toString()
-            // Sauvegarder dans SharedPreferences
             prefs.edit().putString("userId", newId).apply()
             newId
         } else {

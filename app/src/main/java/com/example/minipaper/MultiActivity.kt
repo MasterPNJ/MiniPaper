@@ -6,8 +6,11 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
 class MultiActivity : AppCompatActivity() {
+    private lateinit var soundHelper: SoundHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        soundHelper = SoundHelper(this)
 
         setContentView(R.layout.multi_menu)
 
@@ -17,8 +20,14 @@ class MultiActivity : AppCompatActivity() {
         // Définir le listener pour le clic
         mainMenuButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish() // Ferme l'activité actuelle
+            val volume = PreferenceUtils.getBruitageVolume(this)
+
+            soundHelper.playSoundAndLaunchActivity(
+                context = this,
+                volume = volume,
+                intent = intent,
+                finishActivity = { finish() }
+            )
         }
     }
 }

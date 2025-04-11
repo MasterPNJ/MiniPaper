@@ -6,10 +6,15 @@ import android.os.Bundle
 import android.widget.ImageView
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var soundHelper: SoundHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Indique le layout que tu veux afficher
         setContentView(R.layout.activity_main)
+
+        soundHelper = SoundHelper(this)
+
+        startService(Intent(this, MusicService::class.java))
 
         // Récupère ton ImageView
         val imageViewOption = findViewById<ImageView>(R.id.imageViewOption)
@@ -20,27 +25,54 @@ class MainActivity : AppCompatActivity() {
         imageViewOption.setOnClickListener {
             // Au clic, on lance l'activité OptionsActivity
             val intent = Intent(this, OptionsActivity::class.java)
-            startActivity(intent)
+            val volume = PreferenceUtils.getBruitageVolume(this)
+
+            soundHelper.playSoundAndLaunchActivity(
+                context = this,
+                volume = volume,
+                intent = intent,
+                finishActivity = { finish() }
+            )
         }
 
         val soloButton = findViewById<ImageView>(R.id.imageView9)
         soloButton.setOnClickListener {
             //val intent = Intent(this, CountdownActivity::class.java) temporarly disabled
-            //val intent = Intent(this, CountdownActivity::class.java)
             val intent = Intent(this, SoloGameControllerActivity::class.java)
-            startActivity(intent)
+            val volume = PreferenceUtils.getBruitageVolume(this)
+
+            soundHelper.playSoundAndLaunchActivity(
+                context = this,
+                volume = volume,
+                intent = intent,
+                finishActivity = { finish() }
+            )
         }
 
         val multiButton = findViewById<ImageView>(R.id.imageView10)
         multiButton.setOnClickListener {
             val intent = Intent(this, MultiActivity::class.java)
-            startActivity(intent)
+            val volume = PreferenceUtils.getBruitageVolume(this)
+
+            soundHelper.playSoundAndLaunchActivity(
+                context = this,
+                volume = volume,
+                intent = intent,
+                finishActivity = { finish() }
+            )
         }
 
         val leaderBordButton = findViewById<ImageView>(R.id.imageView13)
         leaderBordButton.setOnClickListener {
             val intent = Intent(this, LeaderbordActivity::class.java)
-            startActivity(intent)
+            val volume = PreferenceUtils.getBruitageVolume(this)
+
+            soundHelper.playSoundAndLaunchActivity(
+                context = this,
+                volume = volume,
+                intent = intent,
+                finishActivity = { finish() }
+            )
         }
 
     }

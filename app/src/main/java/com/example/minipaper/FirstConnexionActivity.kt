@@ -12,9 +12,13 @@ class FirstConnexionActivity : AppCompatActivity() {
     private val prefsname = "MyPrefs"
     private val usernamekey = "username"
 
+    private lateinit var soundHelper: SoundHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_connexion)
+
+        soundHelper = SoundHelper(this)
 
         // Récupérer l'EditText et le "bouton" Confirm
         val editTextUsername = findViewById<EditText>(R.id.editTextUsername)
@@ -39,9 +43,15 @@ class FirstConnexionActivity : AppCompatActivity() {
                     .putString(usernamekey, username)
                     .apply()
 
-                // Passer à MainActivity
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
+                val intent = Intent(this, MainActivity::class.java)
+                val volume = PreferenceUtils.getBruitageVolume(this)
+
+                soundHelper.playSoundAndLaunchActivity(
+                    context = this,
+                    volume = volume,
+                    intent = intent,
+                    finishActivity = { finish() }
+                )
             }
         }
     }

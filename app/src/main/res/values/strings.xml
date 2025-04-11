@@ -11,4 +11,6 @@
     <string name="title_activity_shake_it_up" />
     <string name="title_volume_master_activity" />
     <string name="title_solo_game_controller_activity" />
+    <string name="title_statistics_activity" />
+    <string name="title_myapp_activity" />
 </resources>

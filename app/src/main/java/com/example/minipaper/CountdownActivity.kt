@@ -25,7 +25,7 @@ class CountdownActivity : AppCompatActivity() {
         setContentView(R.layout.activity_countdown)
         // Assurez-vous que c'est bien le nom de votre fichier XML
 
-        // 1) Récupération des vues
+        // Récupération des vues
         postit3 = findViewById(R.id.imageView6)
         text3   = findViewById(R.id.textView8)
         postit2 = findViewById(R.id.imageView11)
@@ -34,10 +34,10 @@ class CountdownActivity : AppCompatActivity() {
         text1   = findViewById(R.id.textView10)
         cancelText = findViewById(R.id.textView6) // "Cancel"
 
-        // 2) Initialiser l'affichage
-        show3() // Par défaut, 3 est déjà visible, mais on s'assure de l'état
+        // Initialiser l'affichage
+        show3()
 
-        // 3) Créer et démarrer le CountDownTimer
+        // Créer et démarrer le CountDownTimer
         countDownTimer = object : CountDownTimer(3000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val secondsRemaining = (millisUntilFinished / 1000).toInt() + 1
@@ -49,22 +49,13 @@ class CountdownActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                // Quand le décompte est terminé, faites l'action souhaitée.
-                // Par exemple, lancer une nouvelle activité, démarrer un jeu, etc.
-                // startActivity(Intent(this@CountdownActivity, NextActivity::class.java))
-                // finish()
-
-                //val intent = Intent(this@CountdownActivity, RandomtapActivity::class.java)
                 setResult(RESULT_OK)
-                //startActivity(intent)
-
-                // Pour la démonstration, on remet juste "1" visible ou on ferme l'activité.
                 finish()
             }
         }
         countDownTimer.start()
 
-        // 4) Gérer le "Cancel"
+        // Gérer le "Cancel"
         cancelText.setOnClickListener {
             // Annuler le compte à rebours et fermer l'activité
             countDownTimer.cancel()

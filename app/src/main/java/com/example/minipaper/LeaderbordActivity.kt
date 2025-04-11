@@ -9,13 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.*
 import com.google.firebase.FirebaseApp
 
-// Classe modèle pour correspondre à la structure Firebase
-data class Player(
-    val id: String = "",
-    val pseudo: String = "",
-    val best_score: Int = 0
-)
-
 class LeaderbordActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var scoreListView: TextView

@@ -18,11 +18,17 @@ import kotlin.math.log10
 import com.example.minipaper.ArcProgressBar
 import android.widget.TextView
 import java.io.File
+import com.google.firebase.FirebaseApp
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 class VolumeMasterActivity : AppCompatActivity() {
 
     private lateinit var textViewDz: TextView
     private lateinit var arcProgressBar: ArcProgressBar
+
+    // Déclaration de la variable "database" comme propriété membre
+    private lateinit var database: DatabaseReference
 
     // Volume cible choisi aléatoirement au démarrage (fixe)
     private val targetDz = (50..90).random()
@@ -46,6 +52,11 @@ class VolumeMasterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_volume_master)
+
+        // Initialiser Firebase et la référence vers le noeud "leaderboard"
+        FirebaseApp.initializeApp(this)
+        database = FirebaseDatabase.getInstance("https://mini-paper-db-default-rtdb.europe-west1.firebasedatabase.app/")
+            .getReference("leaderboard")
 
         textViewDz = findViewById(R.id.textView25)
         arcProgressBar = findViewById(R.id.arcProgressBar)
@@ -142,19 +153,17 @@ class VolumeMasterActivity : AppCompatActivity() {
             timeInRange += dt
             arcProgressBar.setArcColor(Color.GREEN)
             if (timeInRange >= requiredTime) {
-                // Calcul du temps total écoulé depuis le début du jeu
-                val elapsedTime = (now - startTime) / 1000f  // en secondes
-                // Calcul du score selon la formule : (100 + targetDz) / elapsedTime
+                val elapsedTime = (now - startTime) / 1000f  // temps total en secondes
                 val computedScore = (100 + targetDz) / elapsedTime
                 isGameOver = true
                 Toast.makeText(this, "Bravo ! Vous avez maintenu $targetDz Dz pendant ${requiredTime.toInt()}s ! Score: ${computedScore.toInt()}", Toast.LENGTH_LONG).show()
 
-                // Sauvegarder le score dans les SharedPreferences ou l'envoyer à Firebase
                 saveScoreToPreferences(computedScore.toInt())
 
-                // Après un court délai, passer à EndActivity
+                // Met à jour les statistiques dans Firebase
+                PlayerStatsHelper.updatePlayerStats(this, database, "volumeMaster", computedScore.toInt(), elapsedTime)
+
                 handler.postDelayed({
-                    //startActivity(Intent(this, EndActivity::class.java))
                     setResult(RESULT_OK)
                     finish()
                 }, 1000)
@@ -183,9 +192,7 @@ class VolumeMasterActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val oldScore = sharedPref.getInt("cumulativeScore", 0)
         val newScore = oldScore + gameScore
-        sharedPref.edit()
-            .putInt("cumulativeScore", newScore)
-            .apply()
+        sharedPref.edit().putInt("cumulativeScore", newScore).apply()
     }
 
     override fun onDestroy() {

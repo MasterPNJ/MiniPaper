@@ -11,6 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import java.util.Random
 
+import com.google.firebase.FirebaseApp
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+
 class RandomtapActivity : AppCompatActivity() {
 
     private lateinit var rootLayout: ConstraintLayout
@@ -33,18 +37,22 @@ class RandomtapActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_randomtap)
 
-        // 1) Récupérer la référence du parent ConstraintLayout
+        FirebaseApp.initializeApp(this)
+        val database: DatabaseReference = FirebaseDatabase.getInstance("https://mini-paper-db-default-rtdb.europe-west1.firebasedatabase.app/")
+            .getReference("leaderboard")
+
+        // Récupérer la référence du parent ConstraintLayout
         rootLayout = findViewById(R.id.rootConstraintLayout)
 
-        // 2) Récupérer les ImageView (post-its)
+        // Récupérer les ImageView (post-its)
         postit1 = findViewById(R.id.imageView15)
         postit2 = findViewById(R.id.imageView16)
         postit3 = findViewById(R.id.imageView17)
 
-        // 3) Récupérer le TextView du score
+        // Récupérer le TextView du score
         scoreText = findViewById(R.id.textView11) // "Score : 0"
 
-        // 4) Mesurer la taille de la zone d'affichage dès que le layout est prêt
+        // Mesurer la taille de la zone d'affichage dès que le layout est prêt
         rootLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 // Retirer le listener pour éviter qu'il ne se répète
@@ -61,7 +69,7 @@ class RandomtapActivity : AppCompatActivity() {
             }
         })
 
-        // 5) Gérer le clic sur chaque post-it
+        // Gérer le clic sur chaque post-it
         val onPostitClickListener = { postit: ImageView ->
             // Incrémenter le score
             score++
@@ -89,10 +97,11 @@ class RandomtapActivity : AppCompatActivity() {
                     "Temps écoulé ! Score sur RandomTap : $score",
                     Toast.LENGTH_LONG
                 ).show()
+
+                PlayerStatsHelper.updatePlayerStats(this@RandomtapActivity, database, "randomTap", score)
                 
                 saveScoreToPreferences(score)
 
-                //startActivity(Intent(this@RandomtapActivity, ShakeItUpActivity::class.java))
                 setResult(RESULT_OK)
 
                 finish()

@@ -82,7 +82,8 @@ class EndActivity : AppCompatActivity() {
                         shakeItUp_bestScore = existingPlayer?.shakeItUp_bestScore ?: 0,
                         randomTap_bestScore = existingPlayer?.randomTap_bestScore ?: 0,
                         volumeMaster_bestScore = existingPlayer?.volumeMaster_bestScore ?: 0,
-                        volumeMaster_bestTime = existingPlayer?.volumeMaster_bestTime ?: 0f
+                        volumeMaster_bestTime = existingPlayer?.volumeMaster_bestTime ?: 0f,
+                        flappyPaper_bestScore = existingPlayer?.flappyPaper_bestScore ?: 0
                     )
                     userRef.setValue(updatedPlayer)
                 }

@@ -12,6 +12,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.firebase.FirebaseApp
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlin.random.Random
 
 class FlappyPapierActivity : AppCompatActivity() {
@@ -44,6 +47,8 @@ class FlappyPapierActivity : AppCompatActivity() {
     private var pipeSpeed      = 6f
     private val speedBoost     = 0.5f
 
+    private lateinit var database: DatabaseReference
+
     private val updateRunnable = object : Runnable {
         override fun run() {
             updateGame()
@@ -53,6 +58,13 @@ class FlappyPapierActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Initialisation Firebase
+        FirebaseApp.initializeApp(this)
+        database = FirebaseDatabase
+            .getInstance("https://mini-paper-db-default-rtdb.europe-west1.firebasedatabase.app/")
+            .getReference("leaderboard")
+
         setContentView(R.layout.activity_flappy_papier)
 
         rootLayout  = findViewById(R.id.rootConstraintFlappy)
@@ -176,13 +188,29 @@ class FlappyPapierActivity : AppCompatActivity() {
     }
 
     private fun gameOver() {
+
+        PlayerStatsHelper.updatePlayerStats(this@FlappyPapierActivity, database, "flappyPaper", score)
+
+        // Enregistrer le score dans les SharedPreferences
+        saveScoreToPreferences(score)
+
+        setResult(RESULT_OK)
+
         pipeSpeed = 6f
 
         isGameOver = true
         Toast.makeText(this, "Game Over! Score final : $score", Toast.LENGTH_LONG).show()
         handler.postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }, 1500)
+    }
+
+    private fun saveScoreToPreferences(gameScore: Int) {
+        val sharedPref = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val oldScore   = sharedPref.getInt("cumulativeScore", 0)
+        val newScore   = oldScore + gameScore
+        sharedPref.edit()
+            .putInt("cumulativeScore", newScore)
+            .apply()
     }
 }

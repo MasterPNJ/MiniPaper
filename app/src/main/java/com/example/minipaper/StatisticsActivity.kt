@@ -17,6 +17,7 @@ class StatisticsActivity : AppCompatActivity() {
     private lateinit var bestRandomTapTextView: TextView
     private lateinit var bestShakeItUpTextView: TextView
     private lateinit var bestVolumeMasterTextView: TextView
+    private lateinit var bestFlappyPapierTextView: TextView
 
     private lateinit var soundHelper: SoundHelper
 
@@ -29,6 +30,7 @@ class StatisticsActivity : AppCompatActivity() {
         bestRandomTapTextView = findViewById(R.id.bestrandomtap)
         bestShakeItUpTextView = findViewById(R.id.BestShakeItUp)
         bestVolumeMasterTextView = findViewById(R.id.textView31)
+        bestFlappyPapierTextView = findViewById(R.id.FlappyScore)
 
         soundHelper = SoundHelper(this)
 
@@ -70,11 +72,13 @@ class StatisticsActivity : AppCompatActivity() {
                     bestRandomTapTextView.text = "Best score RandomTap : ${player.randomTap_bestScore}"
                     bestShakeItUpTextView.text = "Best score ShakeItUp : ${player.shakeItUp_bestScore}"
                     bestVolumeMasterTextView.text = "Best score VolumeMaster : ${player.volumeMaster_bestScore}"
+                    bestFlappyPapierTextView.text = "Best score FlappyPaper : ${player.flappyPaper_bestScore}"
                 } else {
                     bestScoreTextView.text = "Aucune statistique disponible"
                     bestRandomTapTextView.text = ""
                     bestShakeItUpTextView.text = ""
                     bestVolumeMasterTextView.text = ""
+                    bestFlappyPapierTextView.text = ""
                 }
             }
 

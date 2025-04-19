@@ -41,6 +41,9 @@ class FlappyPapierActivity : AppCompatActivity() {
     private val updateInterval = 20L
     private var isGameOver     = false
 
+    private var pipeSpeed      = 6f
+    private val speedBoost     = 0.5f
+
     private val updateRunnable = object : Runnable {
         override fun run() {
             updateGame()
@@ -93,7 +96,7 @@ class FlappyPapierActivity : AppCompatActivity() {
         avion.y = avionY
 
         // Déplacement horizontale des règles
-        regleX -= 6f
+        regleX -= pipeSpeed
         if (regleX + regleTop.width < 0) {
             // Réapparition à droite
             regleX = screenWidth.toFloat()
@@ -107,6 +110,8 @@ class FlappyPapierActivity : AppCompatActivity() {
             score++
             scoreText.text = "Score : $score"
             hasScored = true
+
+            pipeSpeed += speedBoost
         }
 
         // Collision
@@ -127,11 +132,9 @@ class FlappyPapierActivity : AppCompatActivity() {
             regleTop.layoutParams = it
         }
         regleTop.rotation = 180f
-        regleTop.x        = regleX
-        regleTop.y        = 0f
-        regleTop.requestLayout()
+        regleTop.x = regleX
+        regleTop.y = 0f
 
-        // Tube du bas : de (center+gap/2) à bas écran
         val bottomY = center + gap / 2f
         val bottomH = (screenHeight - bottomY).toInt()
         (regleBottom.layoutParams as ConstraintLayout.LayoutParams).also {
@@ -139,9 +142,8 @@ class FlappyPapierActivity : AppCompatActivity() {
             regleBottom.layoutParams = it
         }
         regleBottom.rotation = 0f
-        regleBottom.x        = regleX
-        regleBottom.y        = bottomY
-        regleBottom.requestLayout()
+        regleBottom.x = regleX
+        regleBottom.y = bottomY
 
         hasScored = false
     }
@@ -156,7 +158,7 @@ class FlappyPapierActivity : AppCompatActivity() {
             v.x + v.width  - offXv,
             v.y + v.height - offYv
         )
-        
+
         val offXo = o.width  * 0.1f
         val offYo = o.height * 0.1f
         val rObs = RectF(
@@ -174,6 +176,8 @@ class FlappyPapierActivity : AppCompatActivity() {
     }
 
     private fun gameOver() {
+        pipeSpeed = 6f
+
         isGameOver = true
         Toast.makeText(this, "Game Over! Score final : $score", Toast.LENGTH_LONG).show()
         handler.postDelayed({

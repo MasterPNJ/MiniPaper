@@ -62,23 +62,25 @@
 
     <ImageView
         android:id="@+id/regle1"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="384dp"
-        android:layout_marginEnd="28dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:src="@drawable/regleinvi"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/regle2"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="384dp"
-        android:layout_marginEnd="36dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:src="@drawable/regleinvi"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/imageView28"

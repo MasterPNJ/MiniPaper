@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 
@@ -51,6 +52,13 @@
 
         <activity
             android:name=".FlappyPapierActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"
+            android:label="@string/title_flappy_papier_activity"
+            android:theme="@style/Theme.MiniPaper" />
+
+        <activity
+            android:name=".KeepItStudyActivity"
             android:screenOrientation="portrait"
             android:exported="false"
             android:label="@string/title_flappy_papier_activity"

@@ -11,7 +11,8 @@ class SoloGameControllerActivity : AppCompatActivity() {
         RandomtapActivity::class.java,
         ShakeItUpActivity::class.java,
         VolumeMasterActivity::class.java,
-        FlappyPapierActivity::class.java
+        FlappyPapierActivity::class.java,
+        KeepItStudyActivity::class.java
     )
 
     // Pour éviter de jouer deux fois de suite le même jeu

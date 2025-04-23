@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">Mini Paper</string>
+    <string name="title_activity_options">OptionsActivity</string>
+    <string name="title_countdown_activity" />
+    <string name="title_randomtap_activity" />
+    <string name="title_first_connexion_activity" />
+    <string name="title_multi_activity" />
+    <string name="title_activity_leaderbord">\n</string>
+    <string name="title_flappy_papier_activity" />
+    <string name="title_endactivity_activity" />
+    <string name="title_activity_shake_it_up" />
+    <string name="title_volume_master_activity" />
+    <string name="title_solo_game_controller_activity" />
+    <string name="title_statistics_activity" />
+    <string name="title_myapp_activity" />
+
+    <string name="cancel">Annuler</string>
+
+    <string name="main_menu">Menu Principal</string>
+    <string name="score">Score : 0</string>
+    <string name="end">Fin</string>
+
+    <string name="enter_your_username">Entrez votre pseudo</string>
+    <string name="mini_paper">Mini-Papier</string>
+    <string name="confirm">Confirmer</string>
+    <string name="random_name">NomRandom</string>
+
+    <string name="shake_it_up">Secouez-le</string>
+    <string name="shake_fast">Secouez plus vite !!</string>
+
+    <string name="flappy_paper">Flappy Papier</string>
+
+    <string name="volume_master">Maitre de Volume</string>
+    <string name="dz">0 Dz"</string>
+
+    <string name="solo">SOLO</string>
+    <string name="multi">MULTI</string>
+
+    <string name="random_tap">Tapotage Aléatoire</string>
+
+    <string name="statistics">Statistique</string>
+
+    <string name="return_main_menu">Retour</string>
+
+    <string name="best_score_shake_it_up">Meilleur score Secouez-le : 0</string>
+    <string name="best_score_random_tap">Meilleur score Tapotage Aléatoire : 0</string>
+    <string name="best_score_flappy_paper">Meilleur score FlappyPapier : 0</string>
+    <string name="best_score_volume_master">Meilleur score Maitre de volume : 0</string>
+    <string name="best_score">Meilleur score total : 0</string>
+
+    <string name="scores">Scores</string>
+
+    <string name="back_to_main_menu">Retour au menu</string>
+
+    <string name="multiplayer">Multijoueur</string>
+    <string name="nearby_player">Joueur proche :</string>
+
+    <string name="settings">Paramètre</string>
+    <string name="music">Musique</string>
+    <string name="sound_effects">Bruitage</string>
+</resources>

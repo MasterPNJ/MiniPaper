@@ -17,7 +17,7 @@ Leaderboard: displays the best score for each player.
 
 Statistics: read the best scores per mini-game.
 
-## Requirements
+## Requirements for build the project
 
 Android Studio
 

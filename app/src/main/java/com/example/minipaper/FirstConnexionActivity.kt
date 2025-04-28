@@ -1,11 +1,15 @@
 package com.example.minipaper
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+
+import android.Manifest
 
 class FirstConnexionActivity : AppCompatActivity() {
 
@@ -13,6 +17,8 @@ class FirstConnexionActivity : AppCompatActivity() {
     private val usernamekey = "username"
 
     private lateinit var soundHelper: SoundHelper
+
+    private val REQUEST_RECORD_AUDIO = 1234
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +59,15 @@ class FirstConnexionActivity : AppCompatActivity() {
                     finishActivity = { finish() }
                 )
             }
+        }
+        // Demande la permission audio
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                REQUEST_RECORD_AUDIO
+            )
         }
     }
 }

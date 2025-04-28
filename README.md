@@ -55,7 +55,7 @@ Check that the google-services.json file is in app/.
 
 Compile and run on an emulator or a physical USB device.
 
-### Or download the apk release
+### Or download the apk release [here](https://github.com/MasterPNJ/MiniPaper/releases/tag/1.0) 
 
  ## Preview model
  

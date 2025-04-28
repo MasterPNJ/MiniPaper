@@ -18,7 +18,7 @@ class SoloGameControllerActivity : AppCompatActivity() {
     // Pour éviter de jouer deux fois de suite le même jeu
     private var lastGame: Class<*>? = null
 
-    // Nombre de mini-jeux joués (excluant le cooldown)
+    // Nombre de mini-jeux joués
     private var gamesPlayed = 0
     private val totalGames = 5
 

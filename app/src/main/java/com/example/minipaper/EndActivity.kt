@@ -36,7 +36,7 @@ class EndActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val totalScore = sharedPref.getInt("cumulativeScore", 0)
 
-        // Récupérer le pseudo (stocké lors de la première connexion)
+        // Récupérer le pseudo
         val pseudo = sharedPref.getString("username", "Player") ?: "Player"
 
         // Mettre à jour le TextView
@@ -65,7 +65,7 @@ class EndActivity : AppCompatActivity() {
      * au score actuellement stocké, tout en préservant les autres statistiques.
      */
     private fun sendScoreToFirebase(pseudo: String, newScore: Int) {
-        val userId = getOrCreateUserId(this)
+        val userId = PreferenceUtils.makeUserKey(this)
         val userRef = database.child(userId)
         userRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -83,7 +83,8 @@ class EndActivity : AppCompatActivity() {
                         randomTap_bestScore = existingPlayer?.randomTap_bestScore ?: 0,
                         volumeMaster_bestScore = existingPlayer?.volumeMaster_bestScore ?: 0,
                         volumeMaster_bestTime = existingPlayer?.volumeMaster_bestTime ?: 0f,
-                        flappyPaper_bestScore = existingPlayer?.flappyPaper_bestScore ?: 0
+                        flappyPaper_bestScore = existingPlayer?.flappyPaper_bestScore ?: 0,
+                        keepItSteady_bestScore = existingPlayer?.keepItSteady_bestScore ?: 0
                     )
                     userRef.setValue(updatedPlayer)
                 }
@@ -94,20 +95,5 @@ class EndActivity : AppCompatActivity() {
                 // Gestion de l'erreur si nécessaire
             }
         })
-    }
-
-    /**
-     * Crée ou récupère un userId unique, stocké dans SharedPreferences.
-     */
-    fun getOrCreateUserId(context: Context): String {
-        val prefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val existingId = prefs.getString("userId", null)
-        return if (existingId == null) {
-            val newId = UUID.randomUUID().toString()
-            prefs.edit().putString("userId", newId).apply()
-            newId
-        } else {
-            existingId
-        }
     }
 }

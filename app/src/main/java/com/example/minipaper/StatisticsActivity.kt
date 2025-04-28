@@ -62,7 +62,7 @@ class StatisticsActivity : AppCompatActivity() {
 
     private fun loadPlayerStats() {
         // Récupérer l'ID utilisateur unique stocké dans SharedPreferences
-        val userId = getOrCreateUserId(this)
+        val userId = PreferenceUtils.makeUserKey(this)
         val userRef = database.child(userId)
 
         userRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -90,20 +90,5 @@ class StatisticsActivity : AppCompatActivity() {
                 Toast.makeText(this@StatisticsActivity, "Erreur de chargement: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         })
-    }
-
-    /**
-     * Récupère ou crée un identifiant utilisateur unique stocké dans SharedPreferences.
-     */
-    private fun getOrCreateUserId(context: Context): String {
-        val prefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val existingId = prefs.getString("userId", null)
-        return if (existingId == null) {
-            val newId = java.util.UUID.randomUUID().toString()
-            prefs.edit().putString("userId", newId).apply()
-            newId
-        } else {
-            existingId
-        }
     }
 }

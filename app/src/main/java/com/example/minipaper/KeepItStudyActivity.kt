@@ -46,59 +46,39 @@ class KeepItStudyActivity : AppCompatActivity(), SensorEventListener {
     private val totalDuration = 10_000L
     private val tickInterval  = 500L
 
-    // Vibreur
-    @Suppress("DEPRECATION")
-    private val vibrator by lazy {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val mgr = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-            mgr.defaultVibrator
-        } else {
-            getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_keepitsteady)
 
-        // 1) Lier les vues
+        // Lier les vues
         scoreText   = findViewById(R.id.textView30)
         angleText   = findViewById(R.id.textView32)
         messageText = findViewById(R.id.textView33)
 
-        // 2) Initialiser Firebase
+        // Initialiser Firebase
         FirebaseApp.initializeApp(this)
         database = FirebaseDatabase
             .getInstance("https://mini-paper-db-default-rtdb.europe-west1.firebasedatabase.app/")
             .getReference("leaderboard")
 
-        // 3) Initialisation capteurs
+        // Initialisation capteurs
         sensorManager   = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         rotationSensor  = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
 
-        // 4) Affichages de départ
+        // Affichages de départ
         scoreText.text   = "Score : 0"
         angleText.text   = "0°"
         messageText.text = "Prêt…"
 
-        // 5) Choisir le premier objectif
+        // Choisir le premier objectif
         pickNewTarget()
 
-        // 6) Démarrer le timer global
+        // Démarrer le timer global
         globalTimer = object : CountDownTimer(totalDuration, tickInterval) {
             override fun onTick(millisUntilFinished: Long) {
                 // Mise à jour du compte-à-rebours + objectif
                 val sec = (millisUntilFinished / 1000).toInt() + 1
                 messageText.text = "${sec}s restantes\nObjectif : ${currentTargetAngle.toInt()}°"
-                // Petite vibration à chaque tick
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    vibrator.vibrate(
-                        VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE)
-                    )
-                } else {
-                    @Suppress("DEPRECATION")
-                    vibrator.vibrate(100)
-                }
             }
             override fun onFinish() {
                 // Fin du mini-jeu
@@ -176,17 +156,14 @@ class KeepItStudyActivity : AppCompatActivity(), SensorEventListener {
     }
 
     private fun endGame() {
-        // 1) Stopper capteur & timer
+        // Stopper capteur & timer
         globalTimer?.cancel()
         sensorManager.unregisterListener(this)
 
-        // 2) Message final
+        // Message final
         Toast.makeText(this, "Temps écoulé ! Score final : $score", Toast.LENGTH_LONG).show()
 
-        // 3) Sauvegarde locale
-        saveScoreToPreferences(score)
-
-        // 4) Mise à jour Firebase
+        // Mise à jour Firebase
         PlayerStatsHelper.updatePlayerStats(
             context   = this,
             database  = database,
@@ -194,7 +171,9 @@ class KeepItStudyActivity : AppCompatActivity(), SensorEventListener {
             newScore  = score
         )
 
-        // 5) Retour au contrôleur
+        saveScoreToPreferences(score)
+
+        // Retour au contrôleur
         setResult(RESULT_OK)
         finish()
     }

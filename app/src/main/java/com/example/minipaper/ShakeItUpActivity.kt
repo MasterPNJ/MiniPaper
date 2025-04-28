@@ -51,29 +51,28 @@ class ShakeItUpActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Verrouiller l'orientation en portrait (optionnel)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_shakeitup)
 
-        // Initialiser Firebase (si ce n'est pas fait ailleurs) et obtenir la référence du leaderboard
+        // Initialiser Firebase
         FirebaseApp.initializeApp(this)
         database = FirebaseDatabase.getInstance("https://mini-paper-db-default-rtdb.europe-west1.firebasedatabase.app/")
             .getReference("leaderboard")
 
-        // 1) Récupérer la TextView et la ProgressBar
+        // Récupérer la TextView et la ProgressBar
         shakeInfoText = findViewById(R.id.textView23)
         progressBar = findViewById(R.id.progressBarShake)
 
-        // 2) Initialiser l'affichage
+        // Initialiser l'affichage
         shakeInfoText.text = "Shake fast !!\nScore : 0"
         progressBar.max = 50
         progressBar.progress = 0
 
-        // 3) Initialiser le SensorManager et l'accéléromètre
+        // Initialiser le SensorManager et l'accéléromètre
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
-        // 4) Démarrer un compte à rebours
+        // Démarrer un compte à rebours
         gameTimer = object : CountDownTimer(gameDuration, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 // Optionnel : afficher un timer

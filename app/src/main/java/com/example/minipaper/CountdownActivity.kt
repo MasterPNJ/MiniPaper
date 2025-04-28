@@ -23,7 +23,6 @@ class CountdownActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_countdown)
-        // Assurez-vous que c'est bien le nom de votre fichier XML
 
         // Récupération des vues
         postit3 = findViewById(R.id.imageView6)

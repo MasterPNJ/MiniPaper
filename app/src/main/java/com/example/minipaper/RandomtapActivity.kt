@@ -50,12 +50,10 @@ class RandomtapActivity : AppCompatActivity() {
         postit3 = findViewById(R.id.imageView17)
 
         // Récupérer le TextView du score
-        scoreText = findViewById(R.id.textView11) // "Score : 0"
+        scoreText = findViewById(R.id.textView11)
 
-        // Mesurer la taille de la zone d'affichage dès que le layout est prêt
         rootLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                // Retirer le listener pour éviter qu'il ne se répète
                 rootLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
 
                 // Récupérer la largeur et la hauteur du parent
@@ -79,12 +77,11 @@ class RandomtapActivity : AppCompatActivity() {
             movePostitRandomly(postit)
         }
 
-        // 6) Associer le listener à chaque post-it
+        // Associer le listener à chaque post-it
         postit1.setOnClickListener { onPostitClickListener(postit1) }
         postit2.setOnClickListener { onPostitClickListener(postit2) }
         postit3.setOnClickListener { onPostitClickListener(postit3) }
 
-        // 7) Lancer un compte à rebours de 15 secondes (non visible)
         gameTimer = object : CountDownTimer(15_000, 1_000) {
             override fun onTick(millisUntilFinished: Long) {
                 // Pas d'affichage, car le timer est invisible pour l'utilisateur
@@ -114,10 +111,8 @@ class RandomtapActivity : AppCompatActivity() {
      * Déplace un post-it (ImageView) à une position aléatoire dans rootLayout.
      */
     private fun movePostitRandomly(postit: ImageView) {
-        // Empêcher un crash si le layout n'est pas encore mesuré
         if (screenWidth == 0 || screenHeight == 0) return
 
-        // Calculer la zone disponible
         val maxX = screenWidth - postit.width
         val maxY = screenHeight - postit.height
 
@@ -125,7 +120,7 @@ class RandomtapActivity : AppCompatActivity() {
         val randomX = random.nextInt(maxX.coerceAtLeast(1))
         val randomY = random.nextInt(maxY.coerceAtLeast(1))
 
-        // Positionner le post-it (en coordonnées absolues dans le parent)
+        // Positionner le post-it
         postit.x = randomX.toFloat()
         postit.y = randomY.toFloat()
     }
@@ -141,7 +136,6 @@ class RandomtapActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        // Annuler le timer si l'activité se détruit (par sécurité)
         if (::gameTimer.isInitialized) {
             gameTimer.cancel()
         }

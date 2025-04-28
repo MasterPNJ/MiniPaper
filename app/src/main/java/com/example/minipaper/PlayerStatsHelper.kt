@@ -16,7 +16,8 @@ data class Player(
     val randomTap_bestScore: Int = 0,
     val volumeMaster_bestScore: Int = 0,
     val volumeMaster_bestTime: Float = 0f,
-    val flappyPaper_bestScore: Int = 0
+    val flappyPaper_bestScore: Int = 0,
+    val keepItSteady_bestScore: Int = 0
 )
 
 /**
@@ -37,7 +38,7 @@ object PlayerStatsHelper {
         newScore: Int,
         newTime: Float? = null
     ) {
-        val userId = getOrCreateUserId(context)
+        val userId = PreferenceUtils.makeUserKey(context)
         val prefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val pseudo = prefs.getString("username", "Player") ?: "Player"
 
@@ -52,16 +53,16 @@ object PlayerStatsHelper {
                 val currentVolumeScore = existingPlayer?.volumeMaster_bestScore ?: 0
                 val currentVolumeTime = existingPlayer?.volumeMaster_bestTime ?: Float.MAX_VALUE
                 val currentFlappyPaperScore = existingPlayer?.flappyPaper_bestScore ?: 0
+                val currentKeepItSteadyScore = existingPlayer?.keepItSteady_bestScore ?: 0
                 val globalBest = existingPlayer?.best_score ?: 0
 
-                // Mettre à jour selon le jeu concerné
                 val updatedShakeScore = if (game == "shakeItUp" && newScore > currentShakeScore) newScore else currentShakeScore
                 val updatedRandomScore = if (game == "randomTap" && newScore > currentRandomScore) newScore else currentRandomScore
                 val updatedVolumeScore = if (game == "volumeMaster" && newScore > currentVolumeScore) newScore else currentVolumeScore
                 val updatedVolumeTime = if (game == "volumeMaster" && newTime != null && newTime < currentVolumeTime) newTime else currentVolumeTime
+                val updatedKeepItSteadyScore = if (game == "keepItSteady" && newScore > currentKeepItSteadyScore) newScore else currentKeepItSteadyScore
                 val updatedFlappyPaperScore = if (game == "flappyPaper" && newScore > currentFlappyPaperScore) newScore else currentFlappyPaperScore
 
-                // On conserve globalBest sans modification ici, sauf si vous souhaitez le calculer différemment.
                 val updatedPlayer = Player(
                     id = userId,
                     pseudo = pseudo,
@@ -70,7 +71,8 @@ object PlayerStatsHelper {
                     randomTap_bestScore = updatedRandomScore,
                     volumeMaster_bestScore = updatedVolumeScore,
                     volumeMaster_bestTime = updatedVolumeTime,
-                    flappyPaper_bestScore = updatedFlappyPaperScore
+                    flappyPaper_bestScore = updatedFlappyPaperScore,
+                    keepItSteady_bestScore = updatedKeepItSteadyScore
                 )
                 userRef.setValue(updatedPlayer)
             }
@@ -79,20 +81,5 @@ object PlayerStatsHelper {
                 // Vous pouvez loguer l'erreur ou afficher un message ici.
             }
         })
-    }
-
-    /**
-     * Crée ou récupère un userId unique stocké dans SharedPreferences.
-     */
-    fun getOrCreateUserId(context: Context): String {
-        val prefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val existingId = prefs.getString("userId", null)
-        return if (existingId == null) {
-            val newId = UUID.randomUUID().toString()
-            prefs.edit().putString("userId", newId).apply()
-            newId
-        } else {
-            existingId
-        }
     }
 }

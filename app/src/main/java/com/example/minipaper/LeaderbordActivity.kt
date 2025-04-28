@@ -81,7 +81,7 @@ class LeaderbordActivity : AppCompatActivity() {
                 // Construire la liste des scores à afficher
                 val scores = sortedPlayers.map { "${it.pseudo} - Score: ${it.best_score}" }
 
-                // Afficher les scores dans le TextView (si plusieurs, les concaténer)
+                // Afficher les scores dans le TextView
                 scoreListView.text = scores.joinToString("\n")
             }
 

@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/shrikhand"
-        android:text="Cancel"
+        android:text="@string/cancel"
         android:textColor="#EF0808"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"

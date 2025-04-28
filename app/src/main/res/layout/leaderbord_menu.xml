@@ -5,6 +5,12 @@
     android:layout_width="match_parent"
              android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/textView28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="back_to_main_menu" />
+
     <ImageView
         android:id="@+id/backgroundImage"
         android:layout_width="2000dp"
@@ -35,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/shrikhand"
-        android:text="Scores"
+        android:text="@string/scores"
         android:textColor="#100000"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
@@ -62,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/shrikhand"
-        android:text="Back to Menu"
+        android:text="@string/back_to_main_menu"
         android:textColor="#0F0303"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -98,7 +104,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/shrikhand"
-        android:text="Statistics"
+        android:text="@string/statistics"
         android:textColor="#050000"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView34"

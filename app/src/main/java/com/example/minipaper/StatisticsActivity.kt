@@ -18,6 +18,7 @@ class StatisticsActivity : AppCompatActivity() {
     private lateinit var bestShakeItUpTextView: TextView
     private lateinit var bestVolumeMasterTextView: TextView
     private lateinit var bestFlappyPapierTextView: TextView
+    private lateinit var bestKeepItStudyTextView: TextView
 
     private lateinit var soundHelper: SoundHelper
 
@@ -31,6 +32,7 @@ class StatisticsActivity : AppCompatActivity() {
         bestShakeItUpTextView = findViewById(R.id.BestShakeItUp)
         bestVolumeMasterTextView = findViewById(R.id.textView31)
         bestFlappyPapierTextView = findViewById(R.id.FlappyScore)
+        bestKeepItStudyTextView = findViewById(R.id.textView34)
 
         soundHelper = SoundHelper(this)
 
@@ -60,7 +62,7 @@ class StatisticsActivity : AppCompatActivity() {
 
     private fun loadPlayerStats() {
         // Récupérer l'ID utilisateur unique stocké dans SharedPreferences
-        val userId = getOrCreateUserId(this)
+        val userId = PreferenceUtils.makeUserKey(this)
         val userRef = database.child(userId)
 
         userRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -73,12 +75,14 @@ class StatisticsActivity : AppCompatActivity() {
                     bestShakeItUpTextView.text = "Best score ShakeItUp : ${player.shakeItUp_bestScore}"
                     bestVolumeMasterTextView.text = "Best score VolumeMaster : ${player.volumeMaster_bestScore}"
                     bestFlappyPapierTextView.text = "Best score FlappyPaper : ${player.flappyPaper_bestScore}"
+                    bestKeepItStudyTextView.text = "Best score KeepItStudy : ${player.keepItSteady_bestScore}"
                 } else {
                     bestScoreTextView.text = "Aucune statistique disponible"
                     bestRandomTapTextView.text = ""
                     bestShakeItUpTextView.text = ""
                     bestVolumeMasterTextView.text = ""
                     bestFlappyPapierTextView.text = ""
+                    bestKeepItStudyTextView.text = ""
                 }
             }
 
@@ -86,20 +90,5 @@ class StatisticsActivity : AppCompatActivity() {
                 Toast.makeText(this@StatisticsActivity, "Erreur de chargement: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         })
-    }
-
-    /**
-     * Récupère ou crée un identifiant utilisateur unique stocké dans SharedPreferences.
-     */
-    private fun getOrCreateUserId(context: Context): String {
-        val prefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val existingId = prefs.getString("userId", null)
-        return if (existingId == null) {
-            val newId = java.util.UUID.randomUUID().toString()
-            prefs.edit().putString("userId", newId).apply()
-            newId
-        } else {
-            existingId
-        }
     }
 }

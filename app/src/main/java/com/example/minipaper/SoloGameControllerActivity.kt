@@ -11,13 +11,14 @@ class SoloGameControllerActivity : AppCompatActivity() {
         RandomtapActivity::class.java,
         ShakeItUpActivity::class.java,
         VolumeMasterActivity::class.java,
-        FlappyPapierActivity::class.java
+        FlappyPapierActivity::class.java,
+        KeepItStudyActivity::class.java
     )
 
     // Pour éviter de jouer deux fois de suite le même jeu
     private var lastGame: Class<*>? = null
 
-    // Nombre de mini-jeux joués (excluant le cooldown)
+    // Nombre de mini-jeux joués
     private var gamesPlayed = 0
     private val totalGames = 5
 

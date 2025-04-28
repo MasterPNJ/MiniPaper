@@ -57,6 +57,13 @@
             android:theme="@style/Theme.MiniPaper" />
 
         <activity
+            android:name=".KeepItStudyActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"
+            android:label="@string/title_flappy_papier_activity"
+            android:theme="@style/Theme.MiniPaper" />
+
+        <activity
             android:name=".StatisticsActivity"
             android:screenOrientation="portrait"
             android:exported="false"
